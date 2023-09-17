@@ -1,7 +1,7 @@
-export const ImageGalleryItem = ({previewURL, tags}) => {
+export const ImageGalleryItem = ({previewURL, tags, toggleModal, largeImageURL}) => {
     return (
 <li>
-  <img src={previewURL} alt={tags} />
+        <img src={previewURL} alt={tags} onClick={() => toggleModal(largeImageURL)} />
 </li>
 	)
 }
