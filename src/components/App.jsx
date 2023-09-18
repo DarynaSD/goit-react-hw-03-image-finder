@@ -2,7 +2,7 @@ import { Component } from 'react';
 
 import { findImagesByQuery } from './helper';
 import Searchbar from './Searchbar';
-import { ImageGallery } from './ImageGallery';
+import {ImageGallery} from './ImageGallery';
 import { LoadMoreButton } from './Button';
 import Modal from './Modal';
 
@@ -14,6 +14,7 @@ class App extends Component {
     isLoading: false,
     error: '',
     isModalOpen: false,
+    largeImageURL: '',
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -58,12 +59,37 @@ class App extends Component {
     this.setState({ page: newPage });
   };
 
+  // toggleModal = (id) => {
+  //   const targetEl = this.state.images.find((one) => one.id === id)
+  //   console.log(targetEl)
+  //   console.log(this.state.largeImageURL)
+  //   this.setState((prev) => ({ isShowModal: !prev.isShowModal, largeImageURL: targetEl.largeImageURL }))
+    
+  // }
+
   toggleModal = () => {
-		this.setState((prev) => ({ isShowModal: !prev.isShowModal }))
-	}
+    this.setState((prev) => ({ isModalOpen: !prev.isModalOpen }))
+  }
+
+  handleImgClick = (id) => {
+    const targetEl = this.state.images.find((one) => one.id === id)
+    
+    this.setState({ largeImageURL: targetEl.largeImageURL })
+    console.log(targetEl)
+    this.toggleModal()
+    console.log(this.state)
+  }
+  
+  // handleModalClick = (id) => {
+  //   const targetEl = this.state.images.find((one) => one.id === id);
+  //   console.log(targetEl.id)
+  //   console.log(targetEl)
+  //   console.log(targetEl.largeImageURL)
+  //   this.setState((prev) => ({ largeImageURL: targetEl.largeImageURL })) 
+  // }
 
   render() {
-    const { error, isLoading, images } = this.state;
+    const { error, isLoading, images, largeImageURL, isModalOpen } = this.state;
     return (
       <>
         {error && <h1>{error}</h1>}
@@ -76,7 +102,7 @@ class App extends Component {
           (!images.length ? (
             <h1>No data found</h1>
           ) : (
-            <ImageGallery images={images} toggleModal={ this.toggleModal} />
+            <ImageGallery images={images} handleImgClick={this.handleImgClick} toggleModal={this.toggleModal} />
           ))}
 
         {images &&
@@ -86,8 +112,8 @@ class App extends Component {
             <LoadMoreButton HandleLoadMoreClick={this.HandleLoadMoreClick} />
           ))}
         
-        {this.state.isShowModal && (
-					<Modal toggleModal={this.toggleModal} largeImageUrl/>
+        {isModalOpen && (
+          <Modal toggleModal={this.toggleModal} largeImageURL={largeImageURL}  />
 				)} 
       </>
     );

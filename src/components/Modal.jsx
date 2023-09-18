@@ -17,9 +17,9 @@ class Modal extends Component {
   render() {
     const { toggleModal, largeImageURL } = this.props;
     return (
-      <div className="overlay" onClick={toggleModal}>
+      <div className="overlay" onClick={toggleModal} style={{width: 400}}>
         <div className="modal">
-          <img src={largeImageURL} alt="" />
+          <img src={largeImageURL} alt="" style={{width: 400}}/>
         </div>
       </div>
     );
