@@ -1,10 +1,13 @@
 import { Component } from 'react';
 
-import { findImagesByQuery } from './helper';
-import Searchbar from './Searchbar';
-import {ImageGallery} from './ImageGallery';
-import { LoadMoreButton } from './Button';
-import Modal from './Modal';
+import css from './App.module.css'
+
+import { findImagesByQuery } from '../helper';
+import Searchbar from '../Searchbar/Searchbar';
+import {ImageGallery} from '../ImageGallery/ImageGallery';
+import { LoadMoreButton } from '../Button/Button';
+import Modal from '../Modal/Modal';
+import Loader from 'components/Loader/Loader';
 
 class App extends Component {
   state = {
@@ -39,7 +42,7 @@ class App extends Component {
         ? this.setState({ images: data.hits })
         : this.setState({ images: [...prevState.images, ...data.hits] });
 
-      console.log(data);
+      //console.log(data);
       // console.log(prevState.images)
       // console.log(this.state.images)
     } catch (error) {
@@ -59,14 +62,6 @@ class App extends Component {
     this.setState({ page: newPage });
   };
 
-  // toggleModal = (id) => {
-  //   const targetEl = this.state.images.find((one) => one.id === id)
-  //   console.log(targetEl)
-  //   console.log(this.state.largeImageURL)
-  //   this.setState((prev) => ({ isShowModal: !prev.isShowModal, largeImageURL: targetEl.largeImageURL }))
-    
-  // }
-
   toggleModal = () => {
     this.setState((prev) => ({ isModalOpen: !prev.isModalOpen }))
   }
@@ -75,34 +70,28 @@ class App extends Component {
     const targetEl = this.state.images.find((one) => one.id === id)
     
     this.setState({ largeImageURL: targetEl.largeImageURL })
-    console.log(targetEl)
+    //console.log(targetEl)
     this.toggleModal()
-    console.log(this.state)
+    //console.log(this.state)
   }
-  
-  // handleModalClick = (id) => {
-  //   const targetEl = this.state.images.find((one) => one.id === id);
-  //   console.log(targetEl.id)
-  //   console.log(targetEl)
-  //   console.log(targetEl.largeImageURL)
-  //   this.setState((prev) => ({ largeImageURL: targetEl.largeImageURL })) 
-  // }
 
   render() {
     const { error, isLoading, images, largeImageURL, isModalOpen } = this.state;
     return (
-      <>
+      <div className={css.App}>
         {error && <h1>{error}</h1>}
 
         <Searchbar submit={this.handleSearchQuery} />
-
-        {isLoading && <h1>Loading...</h1>}
 
         {images &&
           (!images.length ? (
             <h1>No data found</h1>
           ) : (
-            <ImageGallery images={images} handleImgClick={this.handleImgClick} toggleModal={this.toggleModal} />
+            <ImageGallery
+              images={images}
+              handleImgClick={this.handleImgClick}
+              toggleModal={this.toggleModal}
+            />
           ))}
 
         {images &&
@@ -111,11 +100,13 @@ class App extends Component {
           ) : (
             <LoadMoreButton HandleLoadMoreClick={this.HandleLoadMoreClick} />
           ))}
-        
+
+        {isLoading && <Loader />}
+
         {isModalOpen && (
-          <Modal toggleModal={this.toggleModal} largeImageURL={largeImageURL}  />
-				)} 
-      </>
+          <Modal toggleModal={this.toggleModal} largeImageURL={largeImageURL} />
+        )}
+      </div>
     );
   }
 }

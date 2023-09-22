@@ -1,5 +1,7 @@
 import { Component } from 'react';
 
+import css from './Modal.module.css';
+
 class Modal extends Component {
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyEsc);
@@ -11,15 +13,15 @@ class Modal extends Component {
 
   handleKeyEsc = e => {
     if (e.code === 'Escape') this.props.toggleModal();
-    console.log('Esc');
+    //console.log('Esc');
   };
 
   render() {
     const { toggleModal, largeImageURL } = this.props;
     return (
-      <div className="overlay" onClick={toggleModal} style={{width: 400}}>
-        <div className="modal">
-          <img src={largeImageURL} alt="" style={{width: 400}}/>
+      <div className={css.Overlay} onClick={toggleModal}>
+        <div className={css.Modal}>
+          <img src={largeImageURL} alt={largeImageURL} />
         </div>
       </div>
     );
